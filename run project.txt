@@ -1,0 +1,7 @@
+how to run project
+- open terminal
+- cd client
+- yarn start
+- open secound terminal
+- cd server 
+- yarn devStart
