@@ -1,9 +1,9 @@
 import React, {useState,useEffect} from "react"
-import {Col,Container,Row,Form,Navbar,Nav,Button} from 'react-bootstrap'
+import {Col,Container,Row,Form,Navbar,Nav,Button,Modal} from 'react-bootstrap'
+// import {Modal} from 'bootstrap'
 import './App.css';
 import Axios from "axios"
 import Select from 'react-select'
-import { Link } from 'react-router-dom'
 
 export default function Product() {
     // const [listStatus, setListStatus] = useState('')
@@ -16,6 +16,14 @@ export default function Product() {
     const [productDesc, setProductDesc] = useState('')
     const [categoryId, setCategoryId] = useState('')
     const [listCategory, setListCategory] = useState([])
+    const [modalShow, setModalShow] = useState(false)
+    const [editId, setEditId] = useState(false)
+    const [modalName, setModalName] = useState('')
+    const [modalDesc, setModalDesc] = useState('')
+    const [modalCatId, setModalCatId] = useState('')
+    const [newName, setNewName] = useState('')
+    const [newDesc, setNewDesc] = useState('')
+    const [newCatId, setNewCatId] = useState('')
     useEffect(() => {
         if(keywords===''&& sort===''){
             Axios.get("http://localhost:3001/api/product/", {            
@@ -73,6 +81,86 @@ export default function Product() {
             alert(e)
           }
     }
+    const initModal = async (id)=>{
+        listProduct.forEach(rows => {
+            if(rows.id===id){
+                setModalName(rows.name)
+                setModalDesc(rows.desc)
+                setModalCatId(rows.category)
+            }
+        });
+        // for (let i = 0; i < listProduct.length; i++) {
+        //     const rows = listProduct[i];
+        //     setModalName(rows.name)
+        //     setModalDesc(rows.desc)
+        //     setModalCatId(rows.category)
+        // }
+        await setEditId(id)
+        await setModalShow(true)
+
+    }
+    
+    const MyVerticallyCenteredModal = (props)=> {
+        return (
+          <Modal
+            {...props}
+            size="lg"
+            aria-labelledby="contained-modal-title-vcenter"
+            centered
+          >
+            <Modal.Header closeButton>
+              <Modal.Title id="contained-modal-title-vcenter">
+                edit product
+              </Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                <Form>
+                    <Row>
+                        <Col>
+                        <Form.Control 
+                                type="text"
+                                value={modalName}
+                                placeholder="product name" 
+                                onChange={(e) => {
+                                    setModalName(e.target.value)
+                                }}
+                            />  
+                        </Col>
+                        <Col>
+                            <Form.Control 
+                                type="text"
+                                value={modalDesc}
+                                placeholder="product description" 
+                                onChange={(e) => {
+                                    setModalDesc(e.target.value)
+                                }}
+                            />                        
+                        </Col>      
+                        <Col>                            
+                            <Select 
+                            defaultValue={{ label: modalCatId, value: 0 }}
+                            options={listCategory} 
+                            onChange={(e) => {
+                                console.log('UUUUUUUUUUU',e)
+                                setNewCatId(e.value);
+                            }}
+                            />
+                        </Col> 
+                        <Col>                        
+                            <Button variant="primary" type="submit" 
+                                onClick={(e)=>addProduct(e)}>
+                                edit
+                            </Button>
+                        </Col>                                        
+                    </Row>
+                </Form>               
+            </Modal.Body>
+            <Modal.Footer>
+              <Button onClick={props.onHide}>Close</Button>
+            </Modal.Footer>
+          </Modal>
+        );
+      }
 
     return (
         <div>
@@ -132,14 +220,18 @@ export default function Product() {
                                 <td>{val.desc}</td>
                                 <td>{val.category}</td>                                
                                 <td>
-                                    <button >
-                                        <Link to={`/ticket/${val.id}`}>edit</Link>
-                                    </button>
+                                    <Button variant="warning" onClick={() => initModal(val.id)}>
+                                        edit
+                                    </Button>
+                                    <MyVerticallyCenteredModal
+                                        show={modalShow}
+                                        onHide={() => setModalShow(false)}
+                                    />
                                 </td>
                                 <td>
                                     <Button variant="danger" onClick={()=>delProduct(val.id) }>
                                         delete
-                                    </Button>
+                                    </Button>                                   
                                 </td>
                                 </tr>
                             )
@@ -173,20 +265,7 @@ export default function Product() {
                                 }}
                             />                        
                         </Col>      
-                        <Col>
-                            {/* <Form.Select
-                                value='category'
-                                aria-label="select"
-                                onChange={(e) => {
-                                    setCategoryId(e.target.value)
-                                }}
-                            >
-                                <option value="">""</option>
-                                <option value="pending">pending</option>
-                                <option value="accepted">accepted</option>
-                                <option value="resolved">resolved</option>
-                                <option value="rejected">rejected</option>
-                            </Form.Select>                       */}
+                        <Col>                            
                             <Select options={listCategory} onChange={(e) => {
                                 console.log('UUUUUUUUUUU',e)
                                 setCategoryId(e.value);
@@ -195,7 +274,7 @@ export default function Product() {
                         </Col> 
                         <Col>                        
                             <Button variant="primary" type="submit" 
-                            onClick={(e)=>addProduct(e)}>
+                                onClick={(e)=>addProduct(e)}>
                                 add
                             </Button>
                         </Col>                                        

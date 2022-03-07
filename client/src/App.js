@@ -28,7 +28,7 @@ import {Route} from 'react-router-dom'
       <div>
         <Route exact path="/" component={login}/>
         <Route path="/product" component={product}/>       
-        <Route exact path="/list" component={category} />
+        <Route exact path="/category" component={category} />
       </div>      
     </div>
     
