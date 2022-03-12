@@ -6,26 +6,21 @@ import Select from 'react-select'
 
 
 export default function Category() {
-    // const [listStatus, setListStatus] = useState('')
     const [sort, setSort] = useState('')
-    const [listProduct, setListProduct] = useState([])
     const [keywords, setKeywords] = useState('')
     const [keyword, setKeyword] = useState('')
-    const [count, setCount] = useState(0)
-    const [productName, setProductName] = useState('')
-    const [productDesc, setProductDesc] = useState('')
-    const [categoryId, setCategoryId] = useState('')
     const [listCategory, setListCategory] = useState([])
+    const [count, setCount] = useState(0)
+    const [categoryName, setCategoryName] = useState('')
+    const [categoryDesc, setCategoryDesc] = useState('')    
     const [modalShow, setModalShow] = useState(false)
     const [editId, setEditId] = useState(false)
     const [modalName, setModalName] = useState('')
     const [modalDesc, setModalDesc] = useState('')
-    const [modalCatId, setModalCatId] = useState('')
     useEffect(() => {
         if(keywords===''&& sort===''){
             Axios.get("http://localhost:3001/api/category/", {            
             }).then((res)=>{
-                console.log('AAAAAAAAAA',res.data)
                 setListCategory(res.data.data)
             })            
         }else{
@@ -33,7 +28,6 @@ export default function Category() {
                 keywords:keywords,     
                 sort:sort      
             }).then((res)=>{
-                console.log('BBBBBBBBBBBBBBB',res.data)
                 setListCategory(res.data.data)
             })
         }          
@@ -44,25 +38,25 @@ export default function Category() {
         setKeywords(keyword)
     }
 
-    const delProduct = async (id)=>{
-        await Axios.delete(`http://localhost:3001/api/product?id=${id}`)              
+    const delCategory = async (id)=>{
+        await Axios.delete(`http://localhost:3001/api/category?id=${id}`)              
         .then((res)=>{
+            alert('Delete success')
             setCount(count+1)
         })
     }
 
-    const addProduct = async (e)=>{
+    const addCategory = async (e)=>{
         e.preventDefault()        
         try{
-            await Axios.put("http://localhost:3001/api/product/", {
-              name: productName,
-              desc: productDesc,
-              category_id:categoryId
+            await Axios.put("http://localhost:3001/api/category/", {
+              name: categoryName,
+              desc: categoryDesc
             }).then((res)=>{
               if(res.data.status === true){
-                  console.log('999999999999999999')
-                  setProductDesc('')
-                  setProductName('')
+                  alert('Add category complete')
+                  setCategoryDesc('')
+                  setCategoryName('')
                   setCount(count+1)                   
                        
               }else{
@@ -73,20 +67,33 @@ export default function Category() {
             alert(e)
           }
     }
+    const editCategory = async (e)=>{
+        e.preventDefault()        
+        try{
+            await Axios.post("http://localhost:3001/api/category/", {
+                id:editId,
+                name: modalName,
+                desc: modalDesc
+            }).then((res)=>{
+              if(res.data.status === true){
+                  alert('Edit category complete')                 
+                  setModalShow(false)
+                  setCount(count+1)  
+              }else{
+                alert(res.data.error)
+              }
+            })            
+          }catch(e){
+            alert(e)
+          }
+    }
     const initModal = async (id)=>{
-        listProduct.forEach(rows => {
+        listCategory.forEach(rows => {
             if(rows.id===id){
                 setModalName(rows.name)
                 setModalDesc(rows.desc)
-                setModalCatId(rows.category)
             }
         });
-        // for (let i = 0; i < listProduct.length; i++) {
-        //     const rows = listProduct[i];
-        //     setModalName(rows.name)
-        //     setModalDesc(rows.desc)
-        //     setModalCatId(rows.category)
-        // }
         await setEditId(id)
         await setModalShow(true)
 
@@ -102,7 +109,7 @@ export default function Category() {
           >
             <Modal.Header closeButton>
               <Modal.Title id="contained-modal-title-vcenter">
-                edit product
+                edit category
               </Modal.Title>
             </Modal.Header>
             <Modal.Body>
@@ -112,7 +119,7 @@ export default function Category() {
                         <Form.Control 
                                 type="text"
                                 value={modalName}
-                                placeholder="product name" 
+                                placeholder="category name" 
                                 onChange={(e) => {
                                     setModalName(e.target.value)
                                 }}
@@ -122,25 +129,15 @@ export default function Category() {
                             <Form.Control 
                                 type="text"
                                 value={modalDesc}
-                                placeholder="product description" 
+                                placeholder="description" 
                                 onChange={(e) => {
                                     setModalDesc(e.target.value)
                                 }}
                             />                        
-                        </Col>      
-                        <Col>                            
-                            <Select 
-                            // defaultValue={{ label: modalCatId, value: 0 }}
-                            options={listCategory} 
-                            onChange={(e) => {
-                                console.log('UUUUUUUUUUU',e)
-                                setCategoryId(e.value);
-                            }}
-                            />
-                        </Col> 
+                        </Col>                              
                         <Col>                        
                             <Button variant="primary" type="submit" 
-                                onClick={(e)=>addProduct(e)}>
+                                onClick={(e)=>editCategory(e)}>
                                 edit
                             </Button>
                         </Col>                                        
@@ -159,14 +156,14 @@ export default function Category() {
             <Container>
                 <Navbar bg="dark" variant="dark">
                     <Container>
-                        <Navbar.Brand href="/">Navbar</Navbar.Brand>
+                        <Navbar.Brand href="/">Login</Navbar.Brand>
                         <Nav className="me-auto">
                         <Nav.Link href="/product">product</Nav.Link>
                         <Nav.Link href="/category">category</Nav.Link>              
                         </Nav>
                     </Container>
                 </Navbar>
-                <h1>list product</h1>
+                <h1>list category</h1>
                 
                 <Form>
                     <Row>
@@ -192,23 +189,22 @@ export default function Category() {
                     <thead>
                         <tr>                           
                             <th style={{cursor:'pointer'}} scope="col" title='sort by status' onClick={() => {
-                                setSort('p.name');
+                                setSort('name');
                                 }}>name</th>
                             <th style={{cursor:'pointer'}} scope="col" title='sort by last update' onClick={() => {
-                                setSort('p.desc');
-                                }}>description</th>                           
+                                setSort('desc');
+                                }}>description</th>                            
                             <th></th>
                             <th></th>
                         </tr>
                     </thead>
                     <tbody>                    
                     {
-                        listProduct.map((val)=> {
+                        listCategory.map((val)=> {
                             return (
                                 <tr key={val.id}>
                                 <td>{val.name}</td>
-                                <td>{val.desc}</td>
-                                <td>{val.category}</td>                                
+                                <td>{val.desc}</td>                             
                                 <td>
                                     <Button variant="warning" onClick={() => initModal(val.id)}>
                                         edit
@@ -219,7 +215,7 @@ export default function Category() {
                                     />
                                 </td>
                                 <td>
-                                    <Button variant="danger" onClick={()=>delProduct(val.id) }>
+                                    <Button variant="danger" onClick={()=>delCategory(val.id) }>
                                         delete
                                     </Button>                                   
                                 </td>
@@ -232,39 +228,32 @@ export default function Category() {
                 <br />
                 <br />
                 <br />    
-                <h2>add product</h2>
+                <h2>add category</h2>
                 <Form>
                     <Row>
                         <Col>
                         <Form.Control 
                                 type="text"
-                                value={productName}
-                                placeholder="product name" 
+                                value={categoryName}
+                                placeholder="category name" 
                                 onChange={(e) => {
-                                    setProductName(e.target.value)
+                                    setCategoryName(e.target.value)
                                 }}
                             />  
                         </Col>
                         <Col>
                             <Form.Control 
                                 type="text"
-                                value={productDesc}
-                                placeholder="product description" 
+                                value={categoryDesc}
+                                placeholder="category description" 
                                 onChange={(e) => {
-                                    setProductDesc(e.target.value)
+                                    setCategoryDesc(e.target.value)
                                 }}
                             />                        
                         </Col>      
-                        <Col>                            
-                            <Select options={listCategory} onChange={(e) => {
-                                console.log('UUUUUUUUUUU',e)
-                                setCategoryId(e.value);
-                            }}
-                            />
-                        </Col> 
                         <Col>                        
                             <Button variant="primary" type="submit" 
-                                onClick={(e)=>addProduct(e)}>
+                                onClick={(e)=>addCategory(e)}>
                                 add
                             </Button>
                         </Col>                                        

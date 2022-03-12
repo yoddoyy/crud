@@ -8,7 +8,8 @@ module.exports = router
 
 
 router.get('/',[bodyParser.json()], categoryCtrl.getCategory)
+router.post('/search',[bodyParser.json()], categoryCtrl.searchCategory)
 router.get('/getDropDown',[bodyParser.json()], categoryCtrl.getDropDown)
 router.put('/',[bodyParser.json()], categoryCtrl.addCategory)
-// router.put('/',[bodyParser.json()], productCtrl.testpost)
-// router.delete('/',[bodyParser.json()], productCtrl.testpost)
+router.post('/',[bodyParser.json()], categoryCtrl.updateCategory)
+router.delete('/',[bodyParser.json()], categoryCtrl.delCategory)

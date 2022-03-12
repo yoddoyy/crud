@@ -6,7 +6,6 @@ import Axios from "axios"
 import Select from 'react-select'
 
 export default function Product() {
-    // const [listStatus, setListStatus] = useState('')
     const [sort, setSort] = useState('')
     const [listProduct, setListProduct] = useState([])
     const [keywords, setKeywords] = useState('')
@@ -87,7 +86,8 @@ export default function Product() {
             }).then((res)=>{
               if(res.data.status === true){
                   alert('Edit product copmplete')                 
-                       
+                  setModalShow(false)
+                  setCount(count+1)  
               }else{
                 alert(res.data.error)
               }
@@ -181,7 +181,7 @@ export default function Product() {
             <Container>
                 <Navbar bg="dark" variant="dark">
                     <Container>
-                        <Navbar.Brand href="/">Navbar</Navbar.Brand>
+                        <Navbar.Brand href="/">Login</Navbar.Brand>
                         <Nav className="me-auto">
                         <Nav.Link href="/product">product</Nav.Link>
                         <Nav.Link href="/category">category</Nav.Link>              
