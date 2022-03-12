@@ -4,7 +4,5 @@ WORKDIR /app
 COPY . /
 RUN npm install --production 
 COPY . .
-EXPOSE 3000
-# RUN chown -R node /usr/src/app
-# USER node
-CMD ["yarn", "build"]
+EXPOSE 3001
+CMD ["yarn", "start"]

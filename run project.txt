@@ -1,7 +1,8 @@
 how to run project
+method 1
 - open terminal
-- cd client
-- yarn start
+- cd client -> yarn start
 - open secound terminal
-- cd server 
-- yarn devStart
+- cd server  -> yarn devStart
+method 2
+ 
