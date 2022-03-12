@@ -89,3 +89,19 @@ ctrl.delProduct = async (req,res)=>{
         })
     }
 }
+
+ctrl.updateProduct = async (req,res)=>{
+    try{
+        console.log('ZZZZZZZZZZZZZZZZZ',req.body)
+        await productModel.updateProduct(req.db,req.body)
+        res.send({
+            // data:('id :',data[0]),
+            status :true
+        })
+    }catch(e){
+        res.send({
+            error: ('e :',e),
+            status :false
+        })
+    }
+}

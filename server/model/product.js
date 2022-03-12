@@ -23,3 +23,7 @@ model.delProduct = async (trx,id)=>{
     let data = await trx('product').delete().where({id:id}).then(data=>data)
     return data
 }
+
+model.updateProduct =async (trx,param)=>{
+    await trx('product').update({})
+}

@@ -68,10 +68,30 @@ export default function Product() {
               category_id:categoryId
             }).then((res)=>{
               if(res.data.status === true){
-                  console.log('999999999999999999')
+                  alert('Add product complete')
                   setProductDesc('')
                   setProductName('')
                   setCount(count+1)                   
+                       
+              }else{
+                alert(res.data.error)
+              }
+            })            
+          }catch(e){
+            alert(e)
+          }
+    }
+    const editProduct = async (e)=>{
+        e.preventDefault()        
+        try{
+            await Axios.post("http://localhost:3001/api/product/", {
+                id:editId,
+                name: modalName,
+                desc: modalDesc,
+                category_id:modalCatId
+            }).then((res)=>{
+              if(res.data.status === true){
+                  alert('Edit product copmplete')                 
                        
               }else{
                 alert(res.data.error)
@@ -138,17 +158,17 @@ export default function Product() {
                         </Col>      
                         <Col>                            
                             <Select 
-                            defaultValue={{ label: modalCatId, value: 0 }}
-                            options={listCategory} 
-                            onChange={(e) => {
+                                defaultValue={{ label: modalCatId, value: 0 }}
+                                options={listCategory} 
+                                onChange={(e) => {
                                 console.log('UUUUUUUUUUU',e)
-                                setNewCatId(e.value);
-                            }}
+                                setModalCatId(e.value);
+                            }}                            
                             />
                         </Col> 
                         <Col>                        
                             <Button variant="primary" type="submit" 
-                                onClick={(e)=>addProduct(e)}>
+                                onClick={(e)=>editProduct(e)}>
                                 edit
                             </Button>
                         </Col>                                        
