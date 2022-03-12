@@ -2,8 +2,6 @@ import React, {useState,useEffect} from "react"
 import {Col,Container,Row,Form,Navbar,Nav,Button,Modal} from 'react-bootstrap'
 import './App.css';
 import Axios from "axios"
-import Select from 'react-select'
-
 
 export default function Category() {
     const [sort, setSort] = useState('')

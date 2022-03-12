@@ -2,9 +2,9 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const config = require('./config')
 const cors = require('cors')
-// const swaggerUi = require('swagger-ui-express')
-// const YAML = require('yamljs')
-// const swaggerDocument = YAML.load('./swagger.yaml')
+const swaggerUi = require('swagger-ui-express')
+const YAML = require('yamljs')
+const swaggerDocument = YAML.load('./swagger.yaml')
 
 
 const app = express()
@@ -22,8 +22,8 @@ app.get('/', (req, res, next) => {
     res.send('ok');
   });
 
-  app.use('/api', require('./api'))
-// app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
+app.use('/api', require('./api'))
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 
 app.listen(config.server.port, () => {
   console.log('server listen on', config.server.port)

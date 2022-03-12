@@ -23,6 +23,9 @@ ctrl.getCategory = async (req,res) =>{
 
 ctrl.addCategory = async (req,res) =>{
     try{
+        if(req.body.name==''||req.body.desc==''){
+            throw 'Incomplete information'
+        }
         let item = req.body
         item.create_at = new Date().toISOString()
         let data = await categoryModel.addCategory(req.db,item)

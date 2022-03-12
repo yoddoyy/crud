@@ -1,0 +1,289 @@
+openapi: 3.0.0
+info:
+  title: crud API
+  description: swagger API Document
+  version: 0.0.1
+servers:
+  - url: http://localhost:3001/api
+tags:
+- name: "login"
+  description: "login"
+- name: "category"
+  description: "category"
+- name: "product"
+  description: "product"
+paths:
+  /login:
+    post:
+      tags:
+      - "login"
+      post:
+      summary: login.
+      description: login 
+      requestBody:      
+        description: username and password        
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/definitions/login'  
+      responses:
+        '200':    # status code
+          description: "success" 
+  /login/register:
+    put:
+      tags:
+      - "login"
+      put:
+      summary: register.
+      description: register 
+      requestBody:      
+        description: username, password and email       
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/definitions/register'  
+      responses:
+        '200':    # status code
+          description: "success" 
+  /category:
+    get:
+      tags:
+      - "category"
+      get:
+      summary: get list category.
+      description: list category      
+      responses:
+        '200':    # status code
+          description: "success"  
+    put:
+      tags:
+      - "category"
+      put:
+      summary: add category.
+      description: add category   
+      requestBody:      
+        description: name and description         
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/definitions/addCategory'  
+      responses:
+        '200':    # status code
+          description: "success" 
+    post:
+      tags:
+      - "category"
+      post:
+      summary: update category.
+      description: update category   
+      requestBody:      
+        description: name and description         
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/definitions/updateCategory'  
+      responses:
+        '200':    # status code
+          description: "success"
+  /category/{id}:
+    delete:
+      tags:
+      - "category"
+      delete:
+      summary: delete category.
+      description: delete category 
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "ID of category to delete"
+        required: true
+        type: integer
+      responses:
+        '200':    # status code
+          description: "success"
+  /category/search:
+    post:
+      post:
+      tags:
+      - "category"
+      summary: search category.
+      description: search category  
+      requestBody:      
+        description: search can be any , sort in (name or desc)          
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/definitions/search'    
+      responses:
+        '200':    # status code
+          description: "success"
+  /category/getDropDown:
+    get:
+      get:
+      tags:
+      - "category"
+      summary: get category DropDown.
+      description: get category dropdown        
+      responses:
+        '200':    # status code
+          description: "success"
+  
+  /product:
+    get:
+      get:
+      tags:
+      - "product"
+      summary: get list product.
+      description: list product      
+      responses:
+        '200':    # status code
+          description: "success"  
+    put:
+      tags:
+      - "product"
+      put:
+      summary: add product.
+      description: add product   
+      requestBody:      
+        description: name, description and category_id        
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/definitions/addProduct'  
+      responses:
+        '200':    # status code
+          description: "success" 
+    post:
+      tags:
+      - "product"
+      post:
+      summary: update product.
+      description: update product   
+      requestBody:      
+        description: id, name, desc, and category_id        
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/definitions/updateProduct'  
+      responses:
+        '200':    # status code
+          description: "success"
+  /product/{id}:
+    delete:
+      tags:
+      - "product"
+      delete:
+      summary: delete product.
+      description: delete product 
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "ID of product to delete"
+        required: true
+        type: integer
+      responses:
+        '200':    # status code
+          description: "success"
+  /product/search:
+    post:
+      post:
+      tags:
+      - "product"
+      summary: search product.
+      description: search product  
+      requestBody:      
+        description: search can be any , sort in (p.name, p.desc, c.name)          
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/definitions/search'    
+      responses:
+        '200':    # status code
+          description: "success"
+definitions: 
+  search:
+    type: object
+    properties:
+      keywords:
+        type: string
+        description: keywords to search
+      sort:
+        type: string
+        description: value in (name,desc)
+  addCategory:
+    type: object
+    properties:
+      name:
+        type: string
+        description: name of category
+      desc:
+        type: string
+        description: category description
+  updateCategory:
+    type: object
+    properties:
+      id:
+        type: integer
+        description: id of category
+      name:
+        type: string
+        description: name of category
+      desc:
+        type: string
+        description: category description
+  addProduct:
+    type: object
+    properties:      
+      name:
+        type: string
+        description: name of product
+      desc:
+        type: string
+        description: product description
+      category_id:
+        type: integer
+        description: id of category
+  updateProduct:
+    type: object
+    properties:      
+      id:
+        type: integer
+        description: id of product
+      name:
+        type: string
+        description: name of product
+      desc:
+        type: string
+        description: category product
+      category_id:
+        type: integer
+        description: id of category
+  login:
+    type: object
+    properties:      
+      username:
+        type: string
+        description: username
+      password:
+        type: string
+        description: password
+  register:
+    type: object
+    properties:      
+      username:
+        type: string
+        description: username
+      password:
+        type: string
+        description: password
+      email:
+        type: string
+        description: email
