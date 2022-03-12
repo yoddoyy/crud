@@ -23,23 +23,18 @@ export default function Category() {
     const [modalCatId, setModalCatId] = useState('')
     useEffect(() => {
         if(keywords===''&& sort===''){
-            Axios.get("http://localhost:3001/api/product/", {            
+            Axios.get("http://localhost:3001/api/category/", {            
             }).then((res)=>{
                 console.log('AAAAAAAAAA',res.data)
-                setListProduct(res.data.data)
-            })
-            Axios.get(`http://localhost:3001/api/category/getDropDown`)
-            .then((res)=>{
-                console.log('TTTTTTTTTTTT',res.data)
                 setListCategory(res.data.data)
-            })
+            })            
         }else{
-            Axios.post("http://localhost:3001/api/product/search", { 
+            Axios.post("http://localhost:3001/api/category/search", { 
                 keywords:keywords,     
                 sort:sort      
             }).then((res)=>{
                 console.log('BBBBBBBBBBBBBBB',res.data)
-                setListProduct(res.data.data)
+                setListCategory(res.data.data)
             })
         }          
     }, [keywords,sort,count])    
@@ -201,10 +196,8 @@ export default function Category() {
                                 }}>name</th>
                             <th style={{cursor:'pointer'}} scope="col" title='sort by last update' onClick={() => {
                                 setSort('p.desc');
-                                }}>description</th>
-                            <th style={{cursor:'pointer'}} scope="col" title='sort by last update' onClick={() => {
-                                setSort('c.name');
-                                }}>category</th>
+                                }}>description</th>                           
+                            <th></th>
                             <th></th>
                         </tr>
                     </thead>

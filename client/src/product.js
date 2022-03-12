@@ -21,19 +21,14 @@ export default function Product() {
     const [modalName, setModalName] = useState('')
     const [modalDesc, setModalDesc] = useState('')
     const [modalCatId, setModalCatId] = useState('')
-    const [newName, setNewName] = useState('')
-    const [newDesc, setNewDesc] = useState('')
-    const [newCatId, setNewCatId] = useState('')
     useEffect(() => {
         if(keywords===''&& sort===''){
             Axios.get("http://localhost:3001/api/product/", {            
             }).then((res)=>{
-                console.log('AAAAAAAAAA',res.data)
                 setListProduct(res.data.data)
             })
             Axios.get(`http://localhost:3001/api/category/getDropDown`)
             .then((res)=>{
-                console.log('TTTTTTTTTTTT',res.data)
                 setListCategory(res.data.data)
             })
         }else{
@@ -41,7 +36,6 @@ export default function Product() {
                 keywords:keywords,     
                 sort:sort      
             }).then((res)=>{
-                console.log('BBBBBBBBBBBBBBB',res.data)
                 setListProduct(res.data.data)
             })
         }          
@@ -55,6 +49,7 @@ export default function Product() {
     const delProduct = async (id)=>{
         await Axios.delete(`http://localhost:3001/api/product?id=${id}`)              
         .then((res)=>{
+            alert('Delete success')
             setCount(count+1)
         })
     }
@@ -161,7 +156,6 @@ export default function Product() {
                                 defaultValue={{ label: modalCatId, value: 0 }}
                                 options={listCategory} 
                                 onChange={(e) => {
-                                console.log('UUUUUUUUUUU',e)
                                 setModalCatId(e.value);
                             }}                            
                             />
@@ -229,6 +223,7 @@ export default function Product() {
                                 setSort('c.name');
                                 }}>category</th>
                             <th></th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>                    
@@ -287,7 +282,6 @@ export default function Product() {
                         </Col>      
                         <Col>                            
                             <Select options={listCategory} onChange={(e) => {
-                                console.log('UUUUUUUUUUU',e)
                                 setCategoryId(e.value);
                             }}
                             />

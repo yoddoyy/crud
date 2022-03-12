@@ -25,5 +25,9 @@ model.delProduct = async (trx,id)=>{
 }
 
 model.updateProduct =async (trx,param)=>{
-    await trx('product').update({})
+    let id = param.id
+    delete param.id
+    param.update_at =  new Date().toISOString()
+    await trx('product').update(param).where({id:id})
+    return 0
 }

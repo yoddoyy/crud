@@ -13,6 +13,7 @@ ctrl.getProduct = async (req,res)=>{
             status :true
         })
     }catch(e){
+        console.log(e)
         res.send({
             error: ('e :',e),
             status :false
@@ -21,8 +22,10 @@ ctrl.getProduct = async (req,res)=>{
 }
 
 ctrl.addProduct = async (req,res)=>{
-    console.log('RRRRRRRRRRR',req.body)
     try{
+        if(req.body.name==''||req.body.desc==''||req.body.category_id==''){
+            throw 'Incomplete information'
+        }
         let item = req.body
         item.create_at = new Date().toISOString()
         let data = await productModel.addProduct(req.db,item)
@@ -32,6 +35,7 @@ ctrl.addProduct = async (req,res)=>{
             status :true
         })
     }catch(e){
+        console.log(e)
         res.send({
             error: ('e :',e),
             status :false
@@ -66,6 +70,7 @@ ctrl.searchProduct = async (req,res)=>{
             status :true
         })
     }catch(e){
+        console.log(e)
         res.send({
             error: ('e :',e),
             status :false
@@ -75,14 +80,13 @@ ctrl.searchProduct = async (req,res)=>{
 
 ctrl.delProduct = async (req,res)=>{
     try{
-        console.log('ZZZZZZZZZZZZZZZZZ',req.body,req.query)
         let data = await productModel.delProduct(req.db,req.query.id)
-        console.log('YYYYYYYYYYYYYYYY',data)
         res.send({
             data:('id :',data[0]),
             status :true
         })
     }catch(e){
+        console.log(e)
         res.send({
             error: ('e :',e),
             status :false
@@ -92,13 +96,12 @@ ctrl.delProduct = async (req,res)=>{
 
 ctrl.updateProduct = async (req,res)=>{
     try{
-        console.log('ZZZZZZZZZZZZZZZZZ',req.body)
         await productModel.updateProduct(req.db,req.body)
         res.send({
-            // data:('id :',data[0]),
             status :true
         })
     }catch(e){
+        console.log(e)
         res.send({
             error: ('e :',e),
             status :false
