@@ -1,8 +1,13 @@
 how to run project
-method 1
 - open terminal
 - cd client -> yarn start
 - open secound terminal
 - cd server  -> yarn devStart
-method 2
+
+username : admin
+password : 12345
+
+##you can add user by api document or postman
+
+api document http://localhost:3001/api-docs/#/
  
